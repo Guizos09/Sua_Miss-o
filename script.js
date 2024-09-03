@@ -1,49 +1,97 @@
-const caixaPrincipal    = document.querySelector(".caixa-principal");
-const caixaPerguntas    = document.querySelector(".caixa-perguntas");
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
 const caixaAlternativas = document.querySelector(".caixa-alternativas");
-const caixaResultado    = document.querySelector(".caixa-resultado");
-const textoResultado    = document.querySelector(".texto-resultado");
+const caixaResultado = document.querySelector(".caixa-resultado");
+const textoResultado = document.querySelector(".texto-resultado");
 
 const perguntas = [
     {
-        enunciado: "Em sua cidade ocorrem assédios e desrespeitos às mulheres e aos assentos prioritários?",
-        alternativas: [
-            "Sim, acontece com frequência. Estabelecer assentos  e portas de entrada e saída prioritários para gestantes, idosos, crianças e deficientes.",
-            "Não ou raramente."
-        ]
+      enunciado:
+        "No Brasil, em 2022, a média nacional apontou que 31,2% dos adolescentes estavam com excesso de peso. Qual o primeiro pensamento?",
+      alternativas: [
+        {
+          texto: "Isso é preocupante!",
+          afirmacao: "Ficou com receio de estar passando por essa situação.",
+        },
+        {
+          texto: "Isso é bom!",
+          afirmacao: "Pensou que pelo  menos agora os adolescentes não tem mais problemas para se alimentar.",
+        },
+      ],
     },
     {
-        enunciado: "O desmatamento no Brasil atingiu índices alarmantes., tornando-se praticamente cultural. Os efeitos estão sendo sentidos no dia-a-dia da população. É possível minimizar o desmatamento no país?",
-        alternativas: [
-            "Sim, por intermédio de políticas de fiscalização e controle ambiental rigoroso",
-            "Não, porque as leis não são cumpridas"
-        ]
+      enunciado:
+        "As estratégias de gamificação podem ser implementadas para conscientizar adolescentes sobre a adoção de práticas sustentáveis, como o uso de energia renovável, enquanto também incentivam hábitos saudáveis para combater a obesidade na adolescência?Com a descoberta desta tecnologia, chamada Inteligência Artificial, uma professora de tecnologia da escola decidiu fazer uma sequência de aulas sobre esta tecnologia. No fim de uma aula ela pede que você escreva um trabalho sobre o uso de IA em sala de aula. Qual atitude você toma?",
+      alternativas: [
+        {
+          texto:
+            "É  importante a utilização de estratégias de gamificação, tais como: plataformas no ambiente escolar.",
+          afirmacao: "É um processo mais atraente  e estimula mudanças comportamentais ao integrar a aprendizagem com a aplicação prática do cotidiano do aluno e o uso de tecnologias.",
+        },
+        {
+          texto:
+            "A utilização de estratégias de gamificação não seriam eficazes para conscientizar os alunos.",
+          afirmacao: "Preocupado com que a abordagem possa simplificar questões complexas, reduzindo  a reflexão crítica dos alunos, devido a tendência pela educação tradicional.",
+        },
+      ],
     },
+    
     {
-        enunciado: "Qual as consequências do uso de agrotóxico na agricultura?",
-        alternativas: [
-            "Há um impacto muito grande no meio ambiente, causando prejuízos ao solo, água e atmosfera.",
-            "A produção das espécies  é maior, reduz o controle de pragas, aumenta a distribuição da produção."
-        ]
-    }
-]
+      enunciado:
+        "Qual a importância das energias renováveis para o mundo?",
+      alternativas: [
+        {
+          texto:
+            "É muito importante para o mundo atual.",
+          afirmacao: "São opções inesgotáveis e sustentáveis sem gerar resíduos",
+        },
+        {
+          texto:
+            "Não tem tanta importância assim.",
+          afirmacao: "Falta conhecimento para as questões ambientais atuais",
+        },
+      ],
+    },
+  ];
+  
+let atual = 0;
+let perguntaAtual;
+let historiaFinal = "";
 
-let atual = 0
-let perguntaAtual ;
-
-function mostraPergunta (){
-    perguntaAtual = perguntas[atual] ;
-    caixaPerguntas.textContent = perguntAtual.enunciado ;
-    mostraAlternativas() ;
-};
-
-mostraPergunta() ;
-
-function mostraAlternativas(){
-    for (const alternativa of perguntaAtual.alternativa){
-        const botaoAlternativas = document.createElement("button");
-        botaoAlternativas.textContent = alternativa  ;
-        caixaAlternativas.appendChild(botaoAlternativas);
-    }
+function mostraPergunta() {
+  if (atual >= perguntas.length) {
+    MostraResultado();
+    return;
+  }
+  perguntaAtual = perguntas[atual];
+  caixaPerguntas.textContent = perguntaAtual.enunciado;
+  caixaAlternativas.textContent = "";
+  textoResultado.textContent = "";
+  mostraAlternativas();
 }
 
+
+
+function mostraAlternativas(){
+  for(const alternativa of perguntaAtual.alternativas) {
+      const botaoAlternativas = document.createElement("button");
+      botaoAlternativas.textContent = alternativa.texto;
+      botaoAlternativas.addEventListener("click", () => respostaSelecionada(alternativa));
+      caixaAlternativas.appendChild(botaoAlternativas);
+  }
+}
+
+function respostaSelecionada(opcaoSelecionada) {
+  const afirmacoes = opcaoSelecionada.afirmacao;
+  historiaFinal += afirmacoes + " ";
+  atual++;
+ mostraPergunta();
+}
+
+function MostraResultado() {
+  caixaPerguntas.textContent = "Em 2049...";
+  textoResultado.textContent = historiaFinal;
+  caixaAlternativas.textContent = "";
+}
+
+mostraPergunta();
